@@ -14,6 +14,6 @@ public class Main {
         System.out.println("Please enter the article's URL: ");
         String urlName = input.next();
 
-        HyperLinkSource test = new HyperLinkSource(urlName);
+        HyperLinkSource test = new HyperLinkSource(urlName + " ", 0);
     }
 }

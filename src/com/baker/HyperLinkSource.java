@@ -12,8 +12,9 @@ import org.jsoup.nodes.Node;
 
 public class HyperLinkSource {
     private String articleURL, articleText, articleName, articleAuthor, publisher;
-    private List<Node> sourceList;
+    private List<HyperLinkSource> sourceList;
     private Document sourceHTML;
+    private Integer depthN;
     private Integer nHits; // The number of times this source is accessed.
 
     // Default Constructor for debugging
@@ -23,7 +24,8 @@ public class HyperLinkSource {
         articleName = "";
         articleAuthor = "";
         publisher = "";
-        sourceList = new ArrayList<Node>();
+        sourceList = new ArrayList<HyperLinkSource>();
+        depthN = 0;
         try {
             sourceHTML = Jsoup.connect(articleURL).get();
         } catch (IOException e) {
@@ -32,8 +34,9 @@ public class HyperLinkSource {
         nHits = 0;
     }
 
-    public HyperLinkSource(String articleURL) {
+    public HyperLinkSource(String articleURL, Integer depthN) {
         this.articleURL = articleURL;
+        this.depthN = depthN;
         try {
             this.sourceHTML = Jsoup.connect(articleURL).get();
         } catch (IOException e) {
@@ -43,16 +46,27 @@ public class HyperLinkSource {
     }
 
     private void findArticle() {
-        String newArticle = "";
+        String subURL = "";
+        HyperLinkSource tempHolder;
         articleText = "";
         sourceList = new ArrayList<>();
 
-        for (Element paragraphs : sourceHTML.select("p > a")) {
-            if(paragraphs.hasText() ) {
-                sourceList.addAll(paragraphs.childNodes());
+        for (Element link : sourceHTML.select("p > a")) {
+            if(link.hasText() && !depthN.equals(3)) {
+                subURL = link.attr("abs:href");
+                depthN++;
+                tempHolder = new HyperLinkSource(subURL, depthN);
+                sourceList.add(tempHolder);
+                // Temp checkers/debugging
+                System.out.println("Op Completed. Depth = " + depthN);
+                System.out.println(subURL);
+            }
+            else {
+                System.out.println("Op Completed. Depth = " + depthN);
+                System.out.println(subURL);
+                return;
             }
         }
-
         //System.out.println(articleText);
     }
 }
