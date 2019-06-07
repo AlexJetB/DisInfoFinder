@@ -16,3 +16,5 @@ software: to be free for other like minded developers to "study, change and dist
 malicious groups who seek to destroy the truth. 
 
 "Ye shall know the truth, and the truth shall make you free." -John 8:32
+
+<b>(Probable) Frequently Asked Questions</b>
